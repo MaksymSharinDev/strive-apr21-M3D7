@@ -23,15 +23,15 @@
                     <div class="col">
                         <div class="custom-control custom-checkbox">
                             <label class="custom-control-label" for="nameSelect">Name</label>
-                            <input type="checkbox" class="custom-control-input" id="nameSelect" value="name">
+                            <input onchange="filterUsers()" type="checkbox" class="custom-control-input" id="nameSelect" value="name" name="user-info">
                         </div>
                         <div class="custom-control custom-checkbox">
                             <label class="custom-control-label" for="usernameSelect">Username</label>
-                            <input type="checkbox" class="custom-control-input" id="usernameSelect" value="username">
+                            <input onchange="filterUsers()" type="checkbox" class="custom-control-input" id="usernameSelect" value="username" name="user-info">
                         </div>
                         <div class="custom-control custom-checkbox">
                             <label class="custom-control-label" for="emailSelect">Email</label>
-                            <input type="checkbox" class="custom-control-input" id="emailSelect" value="email">
+                            <input onchange="filterUsers()" type="checkbox" class="custom-control-input" id="emailSelect" value="email" name="user-info">
                         </div>
                     </div>
                 </div>
@@ -153,6 +153,8 @@
             document.querySelector('#userListSock').innerHTML = innerHTML + tmpl("user_template", pageData)
         
         })()
+
+        
     }
 
     const showOnlyNames = () =>{
@@ -168,37 +170,62 @@ document.querySelectorAll('.list-group-item .list-group-item').forEach(
 
 document.querySelector('#onlyNames').addEventListener('click', showOnlyNames)
 
-    const filterUsers = () => {
-                const searchInput = document.getElementById('search-input')
-                
+    function filterUsers(){
+                const searchInput = document.getElementById('search-input')            
+                 let checkboxName = document.getElementById('nameSelect')
+                let checkboxUsername = document.getElementById('usernameSelect')
+                let checkboxEmail = document.getElementById('emailSelect')
+                let boxValue = ""
+                if(checkboxName.checked){
+                    boxValue = checkboxName.value
+                    
+                                }
+                if(checkboxUsername.checked){
+                    boxValue = checkboxUsername.value
+                    
+                                }
+                if(checkboxEmail.checked){
+                    boxValue = checkboxEmail.value
+                  
+                                }
+
+                                console.log(boxValue);
+                /* if(checkboxEmail.checked){
+                    query = 'email'
+                    console.log(query);
+                } */
                         //here is a matter of use .map, .contains .startWith
-                        let userTemplate = document.querySelector('#userListSock')       
-                        const ulList = document.querySelectorAll('.list-group-item .list-group-item')
-                        const ul = document.getElementById('user-detail')
-                        searchInput.addEventListener('keyup', (event) => {
-                            ulList.forEach(list => list.setAttribute('hidden', true))
+                        let userTemplate = document.querySelector('#userListSock') 
+                                    
+                        searchInput.addEventListener('keyup', (event) => {  
+                                                 
                             let inputValue = event.target.value.toLowerCase()
-                            console.log(inputValue);  
-                            pageData.users.map(user =>{
-                                console.log(user); 
-                                                             
-                                 if (user.name.toLowerCase().includes(inputValue)){
-                                    /* ul.innerHTML =  */
-                                    userTemplate.innerHTML =""
-                                    userTemplate.innerHTML = `<li class="list-group-item">${user.name}</li>
+                            console.log(inputValue); 
+                            /* const checkBoxes = document.querySelectorAll('input[name="user-info"]:checked')
+                              let info = ''
+                                  userTemplate.innerHTML =""           
+                                checkBoxes.forEach(check => {
+                                    info = check.value
+                                    console.log(info); 
+                                })  */ 
+
+                               
+                            pageData.users.forEach(user =>{
+                                console.log(user);
+                                console.log(boxValue);                                             
+                                 if (user.username.toLowerCase().includes(inputValue)){
+                                    userTemplate.innerHTML =`<li class="list-group-item">${user.name}</li>
                                         <li class="list-group-item">${user.username}</li>
                                         <li class="list-group-item">${user.email}</li>`
                                 }
+                          
                             
                                      // i added classes item-name, item-email, item-username
-                                    // in that way targeting conditionally with a string literal is easy and elegant
-                                   
+                                    // in that way targeting conditionally with a string literal is easy and elegant         
                                   
+                        })   
                         })
-                     
-                            
-                            
-                        })
+                   
                
                  
                 //in ex 1 i done a pageData array you can reuse that instead of recall the API
@@ -229,9 +256,8 @@ document.querySelector('#onlyNames').addEventListener('click', showOnlyNames)
                 }
                 */
 
-            }
-            filterUsers()
 
+            }
 
 </script>
 
