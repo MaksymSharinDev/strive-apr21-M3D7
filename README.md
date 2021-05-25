@@ -1,4 +1,4 @@
-#strive-apr21-M3D7
+# strive-apr21-M3D7
 rushing "not doable" homework during a lesson with Rabia 
 
 ![](docs/preview.gif)
