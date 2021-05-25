@@ -18,7 +18,7 @@
             <div class="col-md-6 offset-md-3">
                 <div class="row pt-4">
                     <div class="col">
-                        <input type="text" class="form-control" placeholder="">
+                        <input id="search-input" type="text" class="form-control" placeholder="">
                     </div>
                     <div class="col">
                         <div class="custom-control custom-checkbox">
@@ -45,7 +45,7 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
                                 <div class="card" style="width: 100%;">
-                                    <ul class="list-group list-group-flush">
+                                    <ul id="user-detail" class="list-group list-group-flush">
                                         <li class="list-group-item"><%=users[i].name%></li>
                                         <li class="list-group-item"><%=users[i].username%></li>
                                         <li class="list-group-item"><%=users[i].email%></li>
@@ -95,6 +95,33 @@
             EXTRA)
             Visualize on a Google Map plugin all the users (using lat & lng)
     */
+
+    
+    const searchInput = document.getElementById('search-input')
+ 
+    fetch('https://jsonplaceholder.typicode.com/users')
+            .then((resp)=>resp.json())
+            .then((data)=>{
+                console.log(data)
+        searchInput.addEventListener('keyup',(event) =>{
+            const ul = document.getElementById('user-detail')
+       
+        let inputValue = event.target.value.toLowerCase()
+        console.log(inputValue);
+        for(let i=0; i<data.length; i++){
+            ul.innerHTML = ""
+            if(inputValue === data[i].name)
+            ul.innerHTML += `<li class="list-group-item">${data[i].name}</li>
+                                        <li class="list-group-item">${data[i].username}</li>
+                                        <li class="list-group-item">${data[i].email}</li>`
+        }
+        })
+            })
+            .catch((err) => console.log(err))
+
+   
+   
+    
     window.onload = () => {
         let tmplCache = {};
         const tmpl = function (str, data) {
@@ -140,6 +167,7 @@
             )
             let innerHTML = document.querySelector('#userListSock').innerHTML
             document.querySelector('#userListSock').innerHTML = innerHTML + tmpl("user_template", pageData)
+         
         })()
     }
 
