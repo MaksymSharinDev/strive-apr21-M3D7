@@ -69,7 +69,7 @@
             </script>
         </div>
     </div>
-    </div>
+    </div>   
 </main>
 <script src="index_files/jquery-3.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -105,7 +105,6 @@
             EXTRA)
             Visualize on a Google Map plugin all the users (using lat & lng)
     */
-
 
     window.onload = () => {
         let tmplCache = {};
@@ -152,19 +151,47 @@
             )
             let innerHTML = document.querySelector('#userListSock').innerHTML
             document.querySelector('#userListSock').innerHTML = innerHTML + tmpl("user_template", pageData)
-            const showOnlyNames = () => {
-                document.querySelectorAll('.list-group-item .list-group-item').forEach(
-                    elem => {
-                        let namesArr = pageData.users.map(elem => elem.name)
-                        console.log(namesArr.includes(elem.textContent), elem.textContent)
-                        !namesArr.includes(elem.textContent) ? elem.setAttribute('hidden', true) : null
-                    }
-                )
-            }
+        
+        })()
+    }
 
-            document.querySelector('#onlyNames').addEventListener('click', showOnlyNames)
-            const filterUsers = () => {
+    const showOnlyNames = () =>{
+
+document.querySelectorAll('.list-group-item .list-group-item').forEach(
+    elem => {
+        let namesArr = pageData.users.map(elem => elem.name)
+        console.log(namesArr.includes(elem.textContent), elem.textContent)
+        !namesArr.includes(elem.textContent) ? elem.setAttribute('hidden', true) : null
+    }
+)
+}
+
+document.querySelector('#onlyNames').addEventListener('click', showOnlyNames)
+
+    const filterUsers = () => {
                 const searchInput = document.getElementById('search-input')
+                fetch('https://jsonplaceholder.typicode.com/users')
+                    .then((resp) => resp.json())
+                    .then((data) => {
+                        console.log(data)
+                        //here is a matter of use .map, .contains .startWith
+                        searchInput.addEventListener('keyup', (event) => {
+                            const ul = document.getElementById('user-detail')
+
+                            let inputValue = event.target.value.toLowerCase()
+                            console.log(inputValue);
+                            for (let i = 0; i < data.length; i++) {
+                                ul.innerHTML = ""
+                                if (inputValue === data[i].name)
+                                    // i added classes item-name, item-email, item-username
+                                    // in that way targeting conditionally with a string literal is easy and elegant
+                                    ul.innerHTML += `<li class="list-group-item">${data[i].name}</li>
+                                        <li class="list-group-item">${data[i].username}</li>
+                                        <li class="list-group-item">${data[i].email}</li>`
+                            }
+                        })
+                    })
+                    .catch((err) => console.log(err))
                 //in ex 1 i done a pageData array you can reuse that instead of recall the API
                 /*
                 let pageData = {
@@ -193,32 +220,8 @@
                 }
                 */
 
-                fetch('https://jsonplaceholder.typicode.com/users')
-                    .then((resp) => resp.json())
-                    .then((data) => {
-                        console.log(data)
-                        //here is a matter of use .map, .contains .startWith
-                        searchInput.addEventListener('keyup', (event) => {
-                            const ul = document.getElementById('user-detail')
-
-                            let inputValue = event.target.value.toLowerCase()
-                            console.log(inputValue);
-                            for (let i = 0; i < data.length; i++) {
-                                ul.innerHTML = ""
-                                if (inputValue === data[i].name)
-                                    // i added classes item-name, item-email, item-username
-                                    // in that way targeting conditionally with a string literal is easy and elegant
-                                    ul.innerHTML += `<li class="list-group-item">${data[i].name}</li>
-                                        <li class="list-group-item">${data[i].username}</li>
-                                        <li class="list-group-item">${data[i].email}</li>`
-                            }
-                        })
-                    })
-                    .catch((err) => console.log(err))
             }
             filterUsers()
-        })()
-    }
 
 
 </script>
