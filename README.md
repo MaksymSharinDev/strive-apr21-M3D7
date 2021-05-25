@@ -1,5 +1,5 @@
 #strive-apr21-M3D7
-rushing "not double" homework during a lesson with Rabia 
+rushing "not doable" homework during a lesson with Rabia 
 
 ![](docs/preview.gif)
 
