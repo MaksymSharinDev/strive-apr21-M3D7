@@ -23,15 +23,15 @@
                     <div class="col">
                         <div class="custom-control custom-checkbox">
                             <label class="custom-control-label" for="nameSelect">Name</label>
-                            <input type="checkbox" class="custom-control-input" id="nameSelect">
+                            <input type="checkbox" class="custom-control-input" id="nameSelect" value="name">
                         </div>
                         <div class="custom-control custom-checkbox">
                             <label class="custom-control-label" for="usernameSelect">Username</label>
-                            <input type="checkbox" class="custom-control-input" id="usernameSelect">
+                            <input type="checkbox" class="custom-control-input" id="usernameSelect" value="username">
                         </div>
                         <div class="custom-control custom-checkbox">
                             <label class="custom-control-label" for="emailSelect">Email</label>
-                            <input type="checkbox" class="custom-control-input" id="emailSelect">
+                            <input type="checkbox" class="custom-control-input" id="emailSelect" value="email">
                         </div>
                     </div>
                 </div>
@@ -56,9 +56,9 @@
                             <li class="list-group-item">
                                 <div class="card" style="width: 100%;">
                                     <ul id="user-detail" class="list-group list-group-flush">
-                                        <li class="list-group-item"><%=users[i].name%></li>
-                                        <li class="list-group-item"><%=users[i].username%></li>
-                                        <li class="list-group-item"><%=users[i].email%></li>
+                                        <li class="list-group-item name-item"><%=users[i].name%></li>
+                                        <li class="list-group-item username-item"><%=users[i].username%></li>
+                                        <li class="list-group-item email-item"><%=users[i].email%></li>
                                     </ul>
                                 </div>
                             </li>
@@ -67,8 +67,8 @@
                 </div>
                 <% } %>
             </script>
-</div>
         </div>
+    </div>
     </div>
 </main>
 <script src="index_files/jquery-3.js"
@@ -105,29 +105,6 @@
             EXTRA)
             Visualize on a Google Map plugin all the users (using lat & lng)
     */
-
-
-    const searchInput = document.getElementById('search-input')
-
-    fetch('https://jsonplaceholder.typicode.com/users')
-        .then((resp) => resp.json())
-        .then((data) => {
-            console.log(data)
-            searchInput.addEventListener('keyup', (event) => {
-                const ul = document.getElementById('user-detail')
-
-                let inputValue = event.target.value.toLowerCase()
-                console.log(inputValue);
-                for (let i = 0; i < data.length; i++) {
-                    ul.innerHTML = ""
-                    if (inputValue === data[i].name)
-                        ul.innerHTML += `<li class="list-group-item">${data[i].name}</li>
-                                        <li class="list-group-item">${data[i].username}</li>
-                                        <li class="list-group-item">${data[i].email}</li>`
-                }
-            })
-        })
-        .catch((err) => console.log(err))
 
 
     window.onload = () => {
@@ -175,9 +152,6 @@
             )
             let innerHTML = document.querySelector('#userListSock').innerHTML
             document.querySelector('#userListSock').innerHTML = innerHTML + tmpl("user_template", pageData)
-            HEAD
-
-
             const showOnlyNames = () => {
                 document.querySelectorAll('.list-group-item .list-group-item').forEach(
                     elem => {
@@ -187,8 +161,62 @@
                     }
                 )
             }
-            document.querySelector('#onlyNames').addEventListener('click', showOnlyNames)
 
+            document.querySelector('#onlyNames').addEventListener('click', showOnlyNames)
+            const filterUsers = () => {
+                const searchInput = document.getElementById('search-input')
+                //in ex 1 i done a pageData array you can reuse that instead of recall the API
+                /*
+                let pageData = {
+                    userData:
+                    {
+                        name: "name",
+                        username: "username",
+                        email: "email"
+                    },
+                    ...
+                }
+                */
+                // also it's needed to conserve select option
+                //can be done in an another .addEventListener body
+                //suggestion: i added value attributes to select options, and page data obj is reusable
+                /*
+                let pageData = {
+                    userData:
+                    {
+                        name: "name",
+                        username: "username",
+                        email: "email"
+                    },
+                    selectedOption : "stuff"   //Like that
+                    ...
+                }
+                */
+
+                fetch('https://jsonplaceholder.typicode.com/users')
+                    .then((resp) => resp.json())
+                    .then((data) => {
+                        console.log(data)
+                        //here is a matter of use .map, .contains .startWith
+                        searchInput.addEventListener('keyup', (event) => {
+                            const ul = document.getElementById('user-detail')
+
+                            let inputValue = event.target.value.toLowerCase()
+                            console.log(inputValue);
+                            for (let i = 0; i < data.length; i++) {
+                                ul.innerHTML = ""
+                                if (inputValue === data[i].name)
+                                    // i added classes item-name, item-email, item-username
+                                    // in that way targeting conditionally with a string literal is easy and elegant
+                                    ul.innerHTML += `<li class="list-group-item">${data[i].name}</li>
+                                        <li class="list-group-item">${data[i].username}</li>
+                                        <li class="list-group-item">${data[i].email}</li>`
+                            }
+                        })
+                    })
+                    .catch((err) => console.log(err))
+            }
+            filterUsers()
         })()
     }
 
