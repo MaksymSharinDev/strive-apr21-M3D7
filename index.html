@@ -37,28 +37,39 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-4" id="userListSock">
-            <script type="text/html" id="user_template">
-                <% for( let i = 0; i < users.length; i++ ) { %>
-                <div class="col-4 p-2">
-                    <div class="card m-2" style="width: 100%;">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <div class="card" style="width: 100%;">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item"><%=users[i].name%></li>
-                                        <li class="list-group-item"><%=users[i].username%></li>
-                                        <li class="list-group-item"><%=users[i].email%></li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="row pt-4">
+                    <button type="button" class="btn btn-primary" id="onlyNames">
+                        Show Names
+                    </button>
                 </div>
-                <% } %>
-            </script>
-
+            </div>
         </div>
+    </div>
+
+    <div class="row mt-4" id="userListSock">
+        <script type="text/html" id="user_template">
+            <% for( let i = 0; i < users.length; i++ ) { %>
+            <div class="col-4 p-2">
+                <div class="card m-2" style="width: 100%;">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="card" style="width: 100%;">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><%=users[i].name%></li>
+                                    <li class="list-group-item"><%=users[i].username%></li>
+                                    <li class="list-group-item"><%=users[i].email%></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <% } %>
+        </script>
+
+    </div>
     </div>
 </main>
 <script src="index_files/jquery-3.js"
@@ -140,6 +151,16 @@
             )
             let innerHTML = document.querySelector('#userListSock').innerHTML
             document.querySelector('#userListSock').innerHTML = innerHTML + tmpl("user_template", pageData)
+            const showOnlyNames = () =>{
+                document.querySelectorAll('.list-group-item .list-group-item').forEach(
+                    elem => {
+                        let namesArr = pageData.users.map( elem => elem.name)
+                        console.log( namesArr.includes(elem.textContent) , elem.textContent)
+                          !namesArr.includes(elem.textContent) ? elem.setAttribute('hidden',true ) : null
+                    }
+                )
+            }
+            document.querySelector('#onlyNames').addEventListener('click',showOnlyNames)
         })()
     }
 
