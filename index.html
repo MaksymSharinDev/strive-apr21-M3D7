@@ -105,7 +105,7 @@
             EXTRA)
             Visualize on a Google Map plugin all the users (using lat & lng)
     */
-
+    let pageData = {}
     window.onload = () => {
         let tmplCache = {};
         const tmpl = function (str, data) {
@@ -137,7 +137,7 @@
             // Provide some basic currying to the user
             return data ? fn(data) : fn;
         };
-        let pageData = {}
+      
         ;(async () => {
             let userData = await fetch('https://jsonplaceholder.typicode.com/users').then(res => res.json())
             pageData.users = userData.map(
@@ -170,28 +170,37 @@ document.querySelector('#onlyNames').addEventListener('click', showOnlyNames)
 
     const filterUsers = () => {
                 const searchInput = document.getElementById('search-input')
-                fetch('https://jsonplaceholder.typicode.com/users')
-                    .then((resp) => resp.json())
-                    .then((data) => {
-                        console.log(data)
+                
                         //here is a matter of use .map, .contains .startWith
+                        let userTemplate = document.querySelector('#userListSock')       
+                        const ulList = document.querySelectorAll('.list-group-item .list-group-item')
+                        const ul = document.getElementById('user-detail')
                         searchInput.addEventListener('keyup', (event) => {
-                            const ul = document.getElementById('user-detail')
-
+                            ulList.forEach(list => list.setAttribute('hidden', true))
                             let inputValue = event.target.value.toLowerCase()
-                            console.log(inputValue);
-                            for (let i = 0; i < data.length; i++) {
-                                ul.innerHTML = ""
-                                if (inputValue === data[i].name)
-                                    // i added classes item-name, item-email, item-username
+                            console.log(inputValue);  
+                            pageData.users.map(user =>{
+                                console.log(user); 
+                                                             
+                                 if (user.name.toLowerCase().includes(inputValue)){
+                                    /* ul.innerHTML =  */
+                                    userTemplate.innerHTML =""
+                                    userTemplate.innerHTML = `<li class="list-group-item">${user.name}</li>
+                                        <li class="list-group-item">${user.username}</li>
+                                        <li class="list-group-item">${user.email}</li>`
+                                }
+                            
+                                     // i added classes item-name, item-email, item-username
                                     // in that way targeting conditionally with a string literal is easy and elegant
-                                    ul.innerHTML += `<li class="list-group-item">${data[i].name}</li>
-                                        <li class="list-group-item">${data[i].username}</li>
-                                        <li class="list-group-item">${data[i].email}</li>`
-                            }
+                                   
+                                  
                         })
-                    })
-                    .catch((err) => console.log(err))
+                     
+                            
+                            
+                        })
+               
+                 
                 //in ex 1 i done a pageData array you can reuse that instead of recall the API
                 /*
                 let pageData = {
