@@ -178,17 +178,19 @@ document.querySelector('#onlyNames').addEventListener('click', showOnlyNames)
                 let boxValue = ""
                 if(checkboxName.checked){
                     boxValue = checkboxName.value
+                 
                     
                                 }
                 if(checkboxUsername.checked){
                     boxValue = checkboxUsername.value
+                    
                     
                                 }
                 if(checkboxEmail.checked){
                     boxValue = checkboxEmail.value
                   
                                 }
-
+                                /* localStorage.setItem('boxValue', boxValue) */
                                 console.log(boxValue);
                 /* if(checkboxEmail.checked){
                     query = 'email'
@@ -197,10 +199,12 @@ document.querySelector('#onlyNames').addEventListener('click', showOnlyNames)
                         //here is a matter of use .map, .contains .startWith
                         let userTemplate = document.querySelector('#userListSock') 
                                     
-                        searchInput.addEventListener('keyup', (event) => {  
+                        searchInput.addEventListener('keydown', (event) => {  
                                                  
                             let inputValue = event.target.value.toLowerCase()
-                            console.log(inputValue); 
+                            console.log(event.target.value.length);
+                            
+                            
                             /* const checkBoxes = document.querySelectorAll('input[name="user-info"]:checked')
                               let info = ''
                                   userTemplate.innerHTML =""           
@@ -209,17 +213,24 @@ document.querySelector('#onlyNames').addEventListener('click', showOnlyNames)
                                     console.log(info); 
                                 })  */ 
 
-                               
+                               /*  let valueStore = localStorage.getItem('boxValue')
+                                console.log(valueStore);  */
                             pageData.users.forEach(user =>{
                                 console.log(user);
-                                console.log(boxValue);                                             
-                                 if (user.username.toLowerCase().includes(inputValue)){
+                                console.log(boxValue);
+                                if(event.target.value.length === 0){
                                     userTemplate.innerHTML =`<li class="list-group-item">${user.name}</li>
                                         <li class="list-group-item">${user.username}</li>
                                         <li class="list-group-item">${user.email}</li>`
                                 }
-                          
-                            
+                                           
+                                 if (user[boxValue].toLowerCase().includes(inputValue)){
+                                    userTemplate.innerHTML =`<li class="list-group-item">${user.name}</li>
+                                        <li class="list-group-item">${user.username}</li>
+                                        <li class="list-group-item">${user.email}</li>`
+                                }
+
+                               
                                      // i added classes item-name, item-email, item-username
                                     // in that way targeting conditionally with a string literal is easy and elegant         
                                   
