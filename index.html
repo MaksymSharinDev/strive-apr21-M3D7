@@ -220,7 +220,7 @@ function search(){
                 }) 
             }
                 
-                if(event.target.value.length > 0){
+                if(event.target.value.length > 1){
                     pageData.users.forEach((user) =>{
                         if (user[boxValue].toLowerCase().includes(inputValue)){
                                 userTemplate.innerHTML =`<li class="list-group-item">${user.name}</li>
