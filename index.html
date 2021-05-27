@@ -153,9 +153,11 @@
             document.querySelector('#userListSock').innerHTML = innerHTML + tmpl("user_template", pageData)
         
         })()
-
+        const searchInput = document.getElementById('search-input') 
+        searchInput.addEventListener('keyup', search)
         
     }
+    
 
     const showOnlyNames = () =>{
 
@@ -167,78 +169,74 @@ document.querySelectorAll('.list-group-item .list-group-item').forEach(
     }
 )
 }
-
 document.querySelector('#onlyNames').addEventListener('click', showOnlyNames)
 
-    function filterUsers(){
-                const searchInput = document.getElementById('search-input')            
-                 let checkboxName = document.getElementById('nameSelect')
-                let checkboxUsername = document.getElementById('usernameSelect')
-                let checkboxEmail = document.getElementById('emailSelect')
-                let boxValue = ""
-                if(checkboxName.checked){
-                    boxValue = checkboxName.value
-                 
-                    
-                                }
-                if(checkboxUsername.checked){
-                    boxValue = checkboxUsername.value
-                    
-                    
-                                }
-                if(checkboxEmail.checked){
-                    boxValue = checkboxEmail.value
-                  
-                                }
-                                /* localStorage.setItem('boxValue', boxValue) */
-                                console.log(boxValue);
-                /* if(checkboxEmail.checked){
-                    query = 'email'
-                    console.log(query);
-                } */
+let boxValue = ""
+function filterUsers(){                    
+        let checkboxName = document.getElementById('nameSelect')
+        let checkboxUsername = document.getElementById('usernameSelect')
+        let checkboxEmail = document.getElementById('emailSelect')                
+            if(checkboxName.checked){
+                 boxValue = checkboxName.value
+            }
+            if(checkboxUsername.checked){
+                 boxValue = checkboxUsername.value
+            }
+            if(checkboxEmail.checked){
+                boxValue = checkboxEmail.value
+            }
+
+            console.log(boxValue);
+            }
+
+function search(){          
                         //here is a matter of use .map, .contains .startWith
-                        let userTemplate = document.querySelector('#userListSock') 
-                                    
-                        searchInput.addEventListener('keydown', (event) => {  
-                                                 
-                            let inputValue = event.target.value.toLowerCase()
-                            console.log(event.target.value.length);
-                            
-                            
-                            /* const checkBoxes = document.querySelectorAll('input[name="user-info"]:checked')
-                              let info = ''
-                                  userTemplate.innerHTML =""           
-                                checkBoxes.forEach(check => {
-                                    info = check.value
-                                    console.log(info); 
-                                })  */ 
-
-                               /*  let valueStore = localStorage.getItem('boxValue')
-                                console.log(valueStore);  */
-                            pageData.users.forEach(user =>{
-                                console.log(user);
-                                console.log(boxValue);
-                                if(event.target.value.length === 0){
-                                    userTemplate.innerHTML =`<li class="list-group-item">${user.name}</li>
-                                        <li class="list-group-item">${user.username}</li>
-                                        <li class="list-group-item">${user.email}</li>`
-                                }
+        let userTemplate = document.querySelector('#userListSock') 
+        let inputValue = event.target.value.toLowerCase()
+        console.log(event.target.value.length);
+        userTemplate.innerHTML = "" 
+        if(event.target.value === ""){
+            pageData.users.map(user =>{               
+                  userTemplate.innerHTML += `<div class="col-4 p-2">
+                    <div class="card m-2" style="width: 100%;">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <div class="card" style="width: 100%;">
+                                    <ul id="user-detail" class="list-group list-group-flush">
+                                        <li class="list-group-item name-item">${user.name}</li>
+                                        <li class="list-group-item username-item">${user.username}</li>
+                                        <li class="list-group-item email-item">${user.email}</li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>`
+                  
+                 /*  
+                  `<li class="list-group-item">${user.name}</li>
+                    <li class="list-group-item">${user.username}</li>
+                    <li class="list-group-item">${user.email}</li>` */
+                }) 
+            }
+                
+                if(event.target.value.length > 0){
+                    pageData.users.forEach((user) =>{
+                        if (user[boxValue].toLowerCase().includes(inputValue)){
+                                userTemplate.innerHTML =`<li class="list-group-item">${user.name}</li>
+                                <li class="list-group-item">${user.username}</li>
+                                    <li class="list-group-item">${user.email}</li>`
+                                    }
+                                })
+                            }
+                        } 
                                            
-                                 if (user[boxValue].toLowerCase().includes(inputValue)){
-                                    userTemplate.innerHTML =`<li class="list-group-item">${user.name}</li>
-                                        <li class="list-group-item">${user.username}</li>
-                                        <li class="list-group-item">${user.email}</li>`
-                                }
-
-                               
+                       
                                      // i added classes item-name, item-email, item-username
                                     // in that way targeting conditionally with a string literal is easy and elegant         
                                   
-                        })   
-                        })
-                   
-               
-                 
+                      
+                      
                 //in ex 1 i done a pageData array you can reuse that instead of recall the API
                 /*
                 let pageData = {
@@ -266,9 +264,6 @@ document.querySelector('#onlyNames').addEventListener('click', showOnlyNames)
                     ...
                 }
                 */
-
-
-            }
 
 </script>
 
